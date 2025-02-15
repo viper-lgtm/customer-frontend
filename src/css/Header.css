@@ -1,0 +1,36 @@
+/* Header.css */
+header {
+    background-color: #f0f0f0;
+    padding: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between; /* Prvky budou na opačných stranách */
+    align-items: center; /* Vertikální zarovnání prvků */
+    width: 100%; /* Zajistí, že se roztáhne na celou šířku */
+}
+
+.auth-buttons {
+    position: absolute; /* Absolutní pozicování */
+    top: 50%; /* Vertikálně na střed */
+    right: 50px; /* Odsazení od pravého okraje */
+    transform: translateY(-50%); /* Posune ho přesně na střed (vertikálně) */
+    display: flex;
+    gap: 10px; /* Mezera mezi tlačítky */
+}
+
+.username {
+    margin-right: 10px; /* Mezera mezi jménem a tlačítkem Sign out */
+}
+
+/* Pokud máš logo a navigaci, styly pro ně: */
+.logo {
+    /* ... styly pro logo ... */
+}
+
+nav {
+    /* ... styly pro navigaci ... */
+}
