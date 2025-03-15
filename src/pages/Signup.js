@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios'; // Import axios pro HTTP požadavky
-import '../css/Register.css';
+import '../css/Signup.css';
 
-export default function Register() {
+export default function Signup() {
     // const [firstName, setFirstName] = useState('');
     // const [lastName, setLastName] = useState('');
     // const [address, setAddress] = useState('');
@@ -12,6 +12,35 @@ export default function Register() {
     // const [userName, setUsername] = useState('')
     // const [password, setPassword] = useState('')
 
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     switch (name) {
+    //         case 'firstName':
+    //             setFirstName(value);
+    //             break;
+    //         case 'lastName':
+    //             setLastName(value);
+    //             break;
+    //         case 'address':
+    //             setAddress(value);
+    //             break;
+    //         case 'email':
+    //             setEmail(value);
+    //             break;
+    //         case 'phone':
+    //             setPhone(value);
+    //             break;
+    //         case 'username':
+    //             setUsername(value);
+    //             break;
+    //         case 'password':
+    //             setPassword(value);
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // };
+
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -19,36 +48,71 @@ export default function Register() {
         email: '',
         phone: '',
         username: '',
-        password: ''
+        password: '',
+        role: 'USER'
     });
 
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-      };
+    };
 
-    const handleSubmit = async (e) => { // Async funkce
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const dataToSend = { ...formData };
+
+        // >>>>> PŘIDÁNO: Kontrola nepovinných polí a nastavení null <<<<<
+        if (dataToSend.firstName === '') {
+            dataToSend.firstName = null;
+        }
+        if (dataToSend.lastName === '') {
+            dataToSend.lastName = null;
+        }
+        if (dataToSend.address === '') {
+            dataToSend.address = null;
+        }
+        if (dataToSend.email === '') {
+            dataToSend.email = null;
+        }
+        if (dataToSend.phone === '') {
+            dataToSend.phone = null;
+        }
+
         try {
-            const response = await axios.post('http://localhost:8080/customer/save', formData); // Odesíláme formData objekt
-            console.log('Úspěšně odesláno:', response.data);
-            navigate('/registration-success');
+            const response = await axios.post('http://localhost:8080/customer/save', dataToSend);
+            // const response = await axios.post('http://localhost:8080/customer/save', {
+            //     firstName,
+            //     lastName,
+            //     address,
+            //     email,
+            //     phone,
+            //     username,
+            //     password,
+            // });
+            if (response.status === 201) {
+                navigate('/registration-result', { state: { success: true } });
+            } else {
+                navigate('/registration-result', { state: { success: false } });
+            }
+            console.log("Status serveru:", response.status);
+            // console.log('Úspěšně odesláno:', response.data);
+            // navigate('/registration-success');
 
         } catch (error) {
             console.error('Chyba odesílání:', error);
-            // Zde můžete zobrazit uživateli chybovou hlášku (např. pomocí alert nebo zobrazením chyby ve stavu komponenty)
+            console.error('Chyba odesílání:', error);
             if (error.response) {
-                console.error("Chyba serveru:", error.response.data); // Podrobnější informace o chybě ze serveru
-                alert("Registrace se nezdařila. Zkuste to prosím znovu. " + error.response.data.message); // Zobrazíme zprávu ze serveru
+                console.error("Chyba serveru:", error.response.data);
+                console.error("Status serveru:", error.response.status);
+                console.error("Hlavičky serveru:", error.response.headers);
             } else if (error.request) {
                 console.error("Chyba požadavku:", error.request);
-                alert("Chyba požadavku. Zkuste to prosím znovu.");
             } else {
                 console.error("Chyba:", error.message);
-                alert("Registrace se nezdařila. Zkuste to prosím znovu.");
             }
+            navigate('/registration-result', { state: { success: false } });
         }
 
         // try {
@@ -72,7 +136,7 @@ export default function Register() {
     };
 
     return (
-        <div className='wrapper'>
+        <div className='container'>
             <div className='form-container'>
                 <h2>Registrace nového uživatele</h2>
                 <form onSubmit={handleSubmit}>
@@ -82,7 +146,7 @@ export default function Register() {
                         placeholder="Jméno"
                         value={formData.firstName}
                         onChange={handleChange}
-                        // required  // Zakomentováno dle potřeby
+                    // required  // Zakomentováno dle potřeby
                     />
                     <input
                         type="text"
@@ -90,7 +154,7 @@ export default function Register() {
                         placeholder="Příjmení"
                         value={formData.lastName}
                         onChange={handleChange}
-                        // required
+                    // required
                     />
                     <input
                         type="text"
@@ -98,7 +162,7 @@ export default function Register() {
                         placeholder="Adresa"
                         value={formData.address}
                         onChange={handleChange}
-                        // required
+                    // required
                     />
                     <input
                         type="email"
@@ -106,7 +170,7 @@ export default function Register() {
                         placeholder="Email"
                         value={formData.email}
                         onChange={handleChange}
-                        // required
+                    // required
                     />
                     <input
                         type="text"
@@ -114,11 +178,11 @@ export default function Register() {
                         placeholder="Telefon"
                         value={formData.phone}
                         onChange={handleChange}
-                        // required
+                    // required
                     />
                     <input
                         type="text"
-                        name="userName"  // Důležité: Přidat name atribut
+                        name="username"  // Důležité: Přidat name atribut
                         placeholder="Uživatelské jméno"
                         value={formData.username}
                         onChange={handleChange}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Aboutme = () => {
     return (
-        <div>
+        <div className='container'>
             <h1>O mně</h1>
             <p>
                 Ahoj, jsem Marty, Java Developer.
