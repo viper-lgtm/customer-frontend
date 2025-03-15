@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+// import { wrapper } from 'axios-cookiejar-support';
+// import { CookieJar } from 'tough-cookie';
 import '../css/Login.css';
 
 const Login = ({ onLogin }) => {
@@ -19,16 +21,29 @@ const Login = ({ onLogin }) => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/customer/login', {
-                username,
-                password
-            });
+
+            // const jar = new CookieJar();
+            // const client = wrapper(axios.create({ jar }));
+
+            const encodedCredentials = btoa(`${username}:${password}`);
+            const authHeader = `Basic ${encodedCredentials}`;
+
+            const response = await axios.post(
+                'http://localhost:8080/customer/login',
+                {username, password},
+                {
+                    headers: {
+                        Authorization: authHeader,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
 
             console.log('Úspěšně odesláno:', response.data);
 
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('username', response.data.username);
-            localStorage.setItem('user', JSON.stringify(response.data)); // Ukládáme user objekt do localStorage
+            localStorage.setItem('user', JSON.stringify(response.data));
 
             onLogin(response.data.username);
             navigate('/profile');

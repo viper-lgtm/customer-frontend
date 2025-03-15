@@ -7,8 +7,12 @@ const Profile = ({ onSignOut }) => { // Přijímáme onSignOut jako prop
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
+        console.log('storedUser:', storedUser); // Přidáno logování storedUser
+
         if (storedUser) {
             setUser(JSON.parse(storedUser));
+            console.log('user:', user); // Přidáno logování user
+
         }
     }, []);
 
