@@ -81,7 +81,9 @@ export default function Signup() {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/customer/save', dataToSend);
+            const apiUrl = process.env.REACT_APP_API_URL;
+            const response = await axios.post(`${apiUrl}/customer/save`, dataToSend);
+            // const response = await axios.post('http://localhost:8080/customer/save', dataToSend);
             // const response = await axios.post('http://localhost:8080/customer/save', {
             //     firstName,
             //     lastName,

@@ -24,12 +24,12 @@ const Login = ({ onLogin }) => {
 
             // const jar = new CookieJar();
             // const client = wrapper(axios.create({ jar }));
-
+            const apiUrl = process.env.REACT_APP_API_URL; // Načtení proměnné prostředí
             const encodedCredentials = btoa(`${username}:${password}`);
             const authHeader = `Basic ${encodedCredentials}`;
 
             const response = await axios.post(
-                'http://localhost:8080/customer/login',
+                `${apiUrl}/customer/login`,
                 {username, password},
                 {
                     headers: {
