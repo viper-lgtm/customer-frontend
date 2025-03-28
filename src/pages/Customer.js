@@ -8,7 +8,8 @@ export default function Customer() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get("http://localhost:8080/customer");
+                const apiUrl = process.env.REACT_APP_API_URL;
+                const response = await axios.get(`${apiUrl}/customer`);
                 console.log("Response data:", response.data);
 
                 setCustomers(response.data); // Set the raw data
